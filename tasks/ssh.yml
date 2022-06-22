@@ -1,4 +1,4 @@
-- name: Ensure .ssh directory exsists.
+- name: (SSH) Ensure .ssh directory exsists.
   file:
     dest: "{{ dest_key | dirname  }}"
     mode: 0700
@@ -7,7 +7,7 @@
     - dotfiles
     - install
     - ssh
-- name: Install private ssh_key.
+- name: (SSH) Install private ssh_key.
   copy:
     src: "{{ source_key }}"
     dest: "{{ dest_key }}"
@@ -21,7 +21,7 @@
     - dotfiles
     - install
     - ssh
-- name: Set authorized key took from file
+- name: (SSH) Set authorized key took from file.
   authorized_key:
     user: "{{ lookup('env', 'USER') }}"
     state: present
