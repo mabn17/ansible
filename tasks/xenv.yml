@@ -1,0 +1,97 @@
+- name: (Node Env) - Check if nvm is installed.
+  stat:
+    path: "{{ lookup('env', 'HOME') }}/{{ nvm_path }}"
+  register: ndir
+  tags:
+    - install 
+
+- name: (Node Env) - Installing nvm.
+  when: ndir.stat.isdir is not defined
+  shell: >
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v{{ nvm_version }}/install.sh | bash
+  args:
+    creates: "{{ lookup('env', 'HOME') }}/{{ nvm_path }}/nvm.sh"
+  tags:
+    - install
+
+- name: (Node Env) - setting up nvm.
+  lineinfile:
+    dest: "{{ lookup('env', 'HOME') }}/.bashrc"
+    line: "{{ item }}"
+  with_items:
+    - 'export NVM_DIR="$HOME/{{ nvm_path }}"'
+    - '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"'
+    - '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"'
+  tags:
+    - install
+
+- name: (Node Env) - Install latest node.
+  shell: . {{ lookup('env', 'HOME') }}/.bashrc && nvm install "{{ item }}"
+  with_items: "{{ nvm_versions }}"
+  tags:
+    - install
+
+- name: (GO Env) - Check if goenv is installed.
+  stat:
+    path: "{{ lookup('env', 'HOME') }}/{{ goenv_path }}"
+  register: gdir
+  tags:
+    - install
+
+- name: (GO Env) - Downloading goenv.
+  when: gdir.stat.isdir is not defined
+  git:
+    repo: https://github.com/wfarr/goenv.git
+    dest: "{{ lookup('env', 'HOME') }}/{{ goenv_path }}"
+- name: (GO Env) - Create versions directory
+  file:
+    path: "{{ lookup('env', 'HOME') }}/{{ item }}"
+    state: directory
+    mode: 0775
+  with_items:
+    - "{{ goenv_path }}/versions"
+  tags:
+    - install
+
+- name: (GO Env) - setting up goenv.
+  lineinfile:
+    dest: "{{ lookup('env', 'HOME') }}/.bashrc" 
+    line: "{{ item }}"
+  with_items:
+    - 'export GOENV_ROOT="$HOME/{{ goenv_path }}"'
+    - 'export PATH="$GOENV_ROOT/bin:$PATH"'
+    - 'eval "$(goenv init -)"'
+    - 'export PATH="$GOROOT/bin:$PATH"'
+    - 'export PATH="$PATH:$GOPATH/bin"'
+    - 'export GO111MODULE=on'
+  tags:
+    - install 
+
+- name: (GO Env) - check installed versions.
+  shell:
+    ls {{ lookup('env', 'HOME') }}/{{ goenv_path }}/versions
+  register: installed_nodes_go
+  tags:
+    - install
+
+- set_fact:
+    nodes_go: "{{ goenv_versions | difference(installed_nodes_go.stdout_lines) }}"
+  tags:
+    - install
+
+- name: (GO Env) - install versions {{ nodes }}.
+  shell:
+    ~/{{ goenv_path }}/bin/goenv install "{{ item }}"
+  with_items: "{{ nodes_go }}"
+  when: nodes_go | length | int > 0
+  tags:
+    - install
+
+- name: (GO Env) - set global version to {{ goenv_versions | max }}.
+  lineinfile:
+    dest: "{{ lookup('env', 'HOME') }}/{{ goenv_path }}/version"
+    line: "{{ goenv_versions | max }}"
+    state: present
+    create: yes
+  tags:
+    - install
