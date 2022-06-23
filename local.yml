@@ -3,16 +3,24 @@
     source_key: "./.ssh/id_rsa"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
     personal: "{{ lookup('env', 'HOME') }}/personal"
+    nvm_path: ".nvm"
+    nvm_version: "0.39.0"
+    nvm_versions:
+      - 18.1.0
+    goenv_path: ".goenv"
+    goenv_version: "0.0.5"
+    goenv_versions:
+      - 1.18.0
   pre_tasks:
     - name: Update APT
       become: true
       apt:
         force_apt_get: true
         update_cache: true
-        state: preset
       tags:
         - install
         - core
   tasks:
     - include: tasks/ssh.yml
     - include: tasks/git.yml
+    - include: tasks/xenv.yml
