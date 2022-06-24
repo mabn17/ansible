@@ -29,5 +29,6 @@
     - include: tasks/2.git.yml
     - include: tasks/3.xenv.yml
     - include: tasks/4.apt.yml
-    - include: tasks/5.zsh.yml
-    - include: tasks/6.nvim.yml
+    - include: tasks/5.npm-packages.yml
+    - include: tasks/6.zsh.yml
+    - include: tasks/7.nvim.yml
