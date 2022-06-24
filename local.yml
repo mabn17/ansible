@@ -21,9 +21,13 @@
         force_apt_get: true
         update_cache: true
       tags:
-        - install
-        - core
+        - ubuntu
+        - wsl
+        - mac
   tasks:
-    - include: tasks/ssh.yml
-    - include: tasks/git.yml
-    - include: tasks/xenv.yml
+    - include: tasks/1.ssh.yml
+    - include: tasks/2.git.yml
+    - include: tasks/3.xenv.yml
+    - include: tasks/4.apt.yml
+    - include: tasks/5.zsh.yml
+    - include: tasks/6.nvim.yml
