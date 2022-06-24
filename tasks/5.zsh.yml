@@ -1,0 +1,30 @@
+- name: (ZSH) - Install ZSH.
+  apt: name=zsh
+  tags: &all_tags [ 'ubuntu', 'wsl', 'mac' ]
+
+- name:  (ZSH) - Change shell to zsh.
+  shell: chsh -s $(which zsh)
+  tags: *all_tags
+
+- name: (ZSH) - Check that the somefile.conf exists.
+  stat:
+    path: "{{ lookup('env', 'HOME') }}/.oh-my-zsh"
+  register: oh_my_stats
+  tags: *all_tags
+
+- name: (ZSH) - Oh-My-Zsh
+  shell: curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/.oh-my-installer && chmod +x ~/.oh-my-installer && ~/.oh-my-installer
+  tags: *all_tags
+  when: oh_my_stats.stat.exists == False
+
+- name: (ZSH) - Install zsh-autosuggestions
+  ansible.builtin.git:
+    repo: 'https://github.com/zsh-users/zsh-autosuggestions.git'
+    dest: "~/.oh-my-zsh/plugins/zsh-autosuggestions"
+  tags: *all_tags
+
+- name: (ZSH) - Install zsh-syntax-highlighting
+  ansible.builtin.git:
+    repo: 'https://github.com/zsh-users/zsh-syntax-highlighting.git'
+    dest: "~/.oh-my-zsh/plugins/zsh-syntax-highlighting"
+  tags: *all_tags
