@@ -18,7 +18,7 @@
   shell: "cd {{ lookup('env', 'HOME') }}/neovim && make -j 20"
   tags: *all_tags
 
-- name: Install neovim.
+- name: (NVIM) - Install neovim.
   become: true
   shell: "cd {{ lookup('env', 'HOME') }}/neovim && make install"
   tags: *all_tags
