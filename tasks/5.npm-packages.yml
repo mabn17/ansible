@@ -1,46 +1,46 @@
-- name: (NPM) - Install eslint
+- name: (NPM) - Install eslint.
   npm:
     name: eslint
     global: yes
   tags: &all_tags [ 'ubuntu', 'mac', 'wsl' ]
 
-- name: (NPM) - Install Python server
+- name: (NPM) - Install Python server.
   npm:
     name: pyright
     global: yes
   tags: *all_tags
 
-- name: (NPM) - Install Bash server
+- name: (NPM) - Install Bash server.
   npm:
     name: bash-language-server
     global: yes
   tags: *all_tags
 
-- name: (NPM) - Install Docker server
+- name: (NPM) - Install Docker server.
   npm:
     name: dockerfile-language-server-nodejs
     global: yes
   tags: *all_tags
 
-- name: (NPM) - Install Yml server
+- name: (NPM) - Install Yml server.
   npm:
     name: yaml-language-server
     global: yes
   tags: *all_tags
 
-- name: (NPM) - Install Typescript server
+- name: (NPM) - Install Typescript server.
   npm:
     name: typescript-language-server
     global: yes
   tags: *all_tags
 
-- name: (NPM) - Install Typescript
+- name: (NPM) - Install Typescript.
   npm:
     name: typescript
     global: yes
   tags: *all_tags
 
-- name: (NPM) - Install TS-Node
+- name: (NPM) - Install TS-Node.
   npm:
     name: ts-node
     global: yes
