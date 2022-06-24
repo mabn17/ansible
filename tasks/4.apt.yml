@@ -1,7 +1,7 @@
 - name: (Tools) - Install packages.
   become: true
   apt:
-    name: [ "tmux", "fzf", "gimp", "xclip", "tldr", "ripgrep", "shutter", "jq", "cmake", "pkg-config", "libpthread-stubs0-dev", "lua5.1", "unzip", "libtool", "libtool-bin", "gettext", "compton", "htop", "lsof", "ccache", "ninja-build", "dconf-editor", "pavucontrol", "moreutils", "clangd", "clang", "clang-11", "clang-12", "clangd", "clangd-10", "clangd-11", "clangd-12", "stow", "libfreetype6-dev", "gpg", "ca-certificates", "gconf2", "libasound2", "libgtk2.0-0", "libxss1", "libxcb-dri3-0", "libdrm2", "libgbm1", "libxshmfence1", "libxml2-dev", "libxslt1-dev", "liblzma-dev", "zlib1g-de" ]
+    name: [ "tmux", "fzf", "gimp", "xclip", "tldr", "apt-transport-https", "ripgrep", "shutter", "jq", "cmake", "pkg-config", "libpthread-stubs0-dev", "lua5.1", "unzip", "libtool", "libtool-bin", "gettext", "compton", "htop", "lsof", "ccache", "ninja-build", "dconf-editor", "pavucontrol", "moreutils", "clangd", "clang", "clang-11", "clang-12", "clangd", "clangd-10", "clangd-11", "clangd-12", "stow", "libfreetype6-dev", "gpg", "ca-certificates", "gconf2", "libasound2", "libgtk2.0-0", "libxss1", "libxcb-dri3-0", "libdrm2", "libgbm1", "libxshmfence1", "libxml2-dev", "libxslt1-dev", "liblzma-dev", "zlib1g-de" ]
   tags: &all_tags [ 'ubuntu', 'mac', 'wsl' ]
 
 - name: (Tools) - Check if JavaScript debugger exists.
@@ -16,13 +16,6 @@
     dest: "{{ personal }}/microsoft-sucks/vscode-node-debug2"
   tags: *all_tags
   when: node_debugger.stat.exists == False
-
-- name: (Tools) - Required libraries for brave
-  become: true
-  apt:
-    name: ["curl", "apt-transport-https"]
-  tags:
-    - ubuntu
 
 - name: (Tools) - Brave Browser archive-keyring.gpg download
   get_url:
