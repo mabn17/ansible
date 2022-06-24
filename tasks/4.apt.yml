@@ -1,0 +1,56 @@
+- name: (Tools) - Install packages.
+  become: true
+  apt:
+    name: [ "tmux", "fzf", "gimp", "xclip", "tldr", "ripgrep", "shutter", "jq", "cmake", "pkg-config", "libpthread-stubs0-dev", "lua5.1", "unzip", "libtool", "libtool-bin", "gettext", "compton", "htop", "lsof", "ccache", "ninja-build", "dconf-editor", "pavucontrol", "moreutils", "clangd", "clang", "clang-11", "clang-12", "clangd", "clangd-10", "clangd-11", "clangd-12", "stow", "libfreetype6-dev", "gpg", "ca-certificates", "gconf2", "libasound2", "libgtk2.0-0", "libxss1", "libxcb-dri3-0", "libdrm2", "libgbm1", "libxshmfence1", "libxml2-dev", "libxslt1-dev", "liblzma-dev", "zlib1g-de" ]
+  tags: &all_tags [ 'ubuntu', 'mac', 'wsl' ]
+
+- name: (Tools) - Check if JavaScript debugger exists.
+  stat:
+    path: "{{ personal }}/microsoft-sucks/vscode-node-debug2"
+  register: node_debugger
+  tags: *all_tags
+
+- name: (Tools) - Install JavaScript debugger
+  ansible.builtin.git:
+    repo: 'git@github.com:microsoft/vscode-node-debug2.git'
+    dest: "{{ personal }}/microsoft-sucks/vscode-node-debug2"
+  tags: *all_tags
+  when: node_debugger.stat.exists == False
+
+- name: (Tools) - Required libraries for brave
+  become: true
+  apt:
+    name: ["curl", "apt-transport-https"]
+  tags:
+    - ubuntu
+
+- name: (Tools) - Brave Browser archive-keyring.gpg download
+  get_url:
+    url: https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+    dest: /usr/share/keyrings/brave-browser-archive-keyring.gpg
+  tags:
+    - ubuntu
+
+- name: (Tools) - Brave Browser PPA setting
+  become: true
+  shell: echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main" | tee /etc/apt/sources.list.d/brave-browser-release.list
+  tags:
+    - ubuntu
+
+- name: (Tools) - Brave Browser apt installation
+  become: true
+  apt:
+    update_cache: yes
+    name: [ "brave-browser", "i3", "nvidia-settings", "ubuntu-mate-desktop" ]
+  tags:
+    - ubuntu
+
+- name: (Tools) - dconf i3
+  shell: dconf write /org/mate/desktop/session/required-components/windowmanager "'i3'"
+  tags:
+    - ubuntu
+
+- name: (Tools) - dconf i3
+  shell: dconf write /org/mate/desktop/background/show-desktop-icons "false"
+  tags:
+    - ubuntu
