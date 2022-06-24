@@ -3,28 +3,27 @@
     dest: "{{ dest_key | dirname  }}"
     mode: 0700
     state: directory
-  tags:
-    - dotfiles
-    - install
-    - ssh
+  tags: &all_tags [ 'ubuntu', 'mac', 'wsl' ]
+
 - name: (SSH) Install private ssh_key.
   copy:
     src: "{{ source_key }}"
     dest: "{{ dest_key }}"
     mode: 0600
-- name: Install public ssh_key.
+  tags: *all_tags
+
+- name: (SSH) Install public ssh_key.
   copy:
     src: "{{ source_key }}.pub"
     dest: "{{ dest_key }}.pub"
     mode: 0644
-  tags:
-    - dotfiles
-    - install
-    - ssh
+  tags: *all_tags
+
 - name: (SSH) Set authorized key took from file.
   authorized_key:
     user: "{{ lookup('env', 'USER') }}"
     state: present
     key: "{{ lookup('env', 'USER') }}/.ssh/id_rsa.pub"
   with_fileglob:
-  - "{{ lookup('env', 'HOME') }}/.ssh/*.pub"
+    - "{{ lookup('env', 'HOME') }}/.ssh/*.pub"
+  tags: *all_tags

@@ -2,8 +2,7 @@
   stat:
     path: "{{ lookup('env', 'HOME') }}/{{ nvm_path }}"
   register: ndir
-  tags:
-    - install 
+  tags: &all_tags [ 'ubuntu', 'mac', 'wsl' ]
 
 - name: (Node Env) - Installing nvm.
   when: ndir.stat.isdir is not defined
@@ -11,8 +10,7 @@
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v{{ nvm_version }}/install.sh | bash
   args:
     creates: "{{ lookup('env', 'HOME') }}/{{ nvm_path }}/nvm.sh"
-  tags:
-    - install
+  tags: *all_tags
 
 - name: (Node Env) - setting up nvm.
   lineinfile:
@@ -22,27 +20,25 @@
     - 'export NVM_DIR="$HOME/{{ nvm_path }}"'
     - '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"'
     - '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"'
-  tags:
-    - install
+  tags: *all_tags
 
 - name: (Node Env) - Install latest node.
   shell: . {{ lookup('env', 'HOME') }}/.bashrc && nvm install "{{ item }}"
   with_items: "{{ nvm_versions }}"
-  tags:
-    - install
+  tags: *all_tags
 
 - name: (GO Env) - Check if goenv is installed.
   stat:
     path: "{{ lookup('env', 'HOME') }}/{{ goenv_path }}"
   register: gdir
-  tags:
-    - install
+  tags: *all_tags
 
 - name: (GO Env) - Downloading goenv.
   when: gdir.stat.isdir is not defined
   git:
     repo: https://github.com/wfarr/goenv.git
     dest: "{{ lookup('env', 'HOME') }}/{{ goenv_path }}"
+  tags: *all_tags
 
 - name: (GO Env) - Create versions directory.
   file:
@@ -51,8 +47,7 @@
     mode: 0775
   with_items:
     - "{{ goenv_path }}/versions"
-  tags:
-    - install
+  tags: *all_tags
 
 - name: (GO Env) - setting up goenv.
   lineinfile:
@@ -65,28 +60,24 @@
     - 'export PATH="$GOROOT/bin:$PATH"'
     - 'export PATH="$PATH:$GOPATH/bin"'
     - 'export GO111MODULE=on'
-  tags:
-    - install 
+  tags: *all_tags
 
 - name: (GO Env) - check installed versions.
   shell:
     ls {{ lookup('env', 'HOME') }}/{{ goenv_path }}/versions
   register: installed_nodes_go
-  tags:
-    - install
+  tags: *all_tags
 
 - set_fact:
     nodes_go: "{{ goenv_versions | difference(installed_nodes_go.stdout_lines) }}"
-  tags:
-    - install
+  tags: *all_tags
 
 - name: (GO Env) - install versions {{ nodes_go }}.
   shell:
     ~/{{ goenv_path }}/bin/goenv install "{{ item }}"
   with_items: "{{ nodes_go }}"
   when: nodes_go | length | int > 0
-  tags:
-    - install
+  tags: *all_tags
 
 - name: (GO Env) - set global version to {{ goenv_versions | max }}.
   lineinfile:
@@ -94,22 +85,19 @@
     line: "{{ goenv_versions | max }}"
     state: present
     create: yes
-  tags:
-    - install
+  tags: *all_tags
 
 - name: (Py Env) - Check if py is installed.
   stat:
     path: "{{ lookup('env', 'HOME') }}/{{ pyenv_path }}"
   register: pdir
-  tags:
-    - install
+  tags: *all_tags
 
 - name: (Py Env) - downloading pyenv.
   when: pdir.stat.isdir is not defined
   shell: >
     curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-  tags:
-    - install
+  tags: *all_tags
 
 - name: (Py Env) - Create versions directory.
   file:
@@ -118,8 +106,7 @@
     mode: 0775
   with_items:
     - "{{ pyenv_path }}/versions"
-  tags:
-    - install
+  tags: *all_tags
 
 - name: (Py Env) - Setting up pyenv.
   lineinfile:
@@ -129,28 +116,24 @@
     - 'export PATH="$HOME/{{ pyenv_path }}/bin:$PATH"'
     - 'eval "$(pyenv init --path)"'
     - 'eval "$(pyenv virtualenv-init -)"'
-  tags:
-    - install
+  tags: *all_tags
 
 - name: (Py Env) - check installed versions.
   shell:
     ls {{ lookup('env', 'HOME') }}/{{ pyenv_path }}/versions
   register: installed_nodes_py
-  tags:
-    - install
+  tags: *all_tags
 
 - set_fact:
     nodes_py: "{{ pyenv_versions | difference(installed_nodes_py.stdout_lines) }}"
-  tags:
-    - install
+  tags: *all_tags
 
 - name: (Py Env) - install versions {{ nodes_py }}.
   shell:
     ~/{{ pyenv_path }}/bin/pyenv install "{{ item }}"
   with_items: "{{ nodes_py }}"
   when: nodes_py | length | int > 0
-  tags:
-    - install
+  tags: *all_tags
 
 - name: (GO Env) - set global version to {{ pyenv_versions | max }}.
   lineinfile:
@@ -158,11 +141,9 @@
     line: "{{ pyenv_versions | max }}"
     state: present
     create: yes
-  tags:
-    - install
+  tags: *all_tags
 
 - name: (XEnv) - Restarting shell.
   shell: >
     exec $SHELL
-  tags:
-    - install
+  tags: *all_tags

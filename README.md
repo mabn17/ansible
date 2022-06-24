@@ -11,7 +11,7 @@ ansible-playbook local.yml --ask-vault-pass --tags {ENV}
 ```
 
 Substitute {ENV} your enviroment. Currently supports:
- - `wsl2`
+ - `wsl`
  - `ubuntu`
  - `mac` (Not yet tested)
 

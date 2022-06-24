@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-sudo apt install --yes software-properties-common build-essential curl
+sudo apt install --yes software-properties-common build-essential curl wget
 sudo apt-add-repository --yes --update ppa:ansible/ansible
 sudo apt install ansible

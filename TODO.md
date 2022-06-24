@@ -5,14 +5,7 @@
  - Add auto-signed commits & tags
 
 ## Packages
- - Split to multiple files
- - Add golang, node, python and apt packages
-
-## Zsh
- - Add install scripts
-
-## Nvim
- - Add install scripts
+ - Add golang, node, python global packages
 
 ## Dotfiles
  - Finnish dotfiles config, clone it and set it up
