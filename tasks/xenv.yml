@@ -43,7 +43,8 @@
   git:
     repo: https://github.com/wfarr/goenv.git
     dest: "{{ lookup('env', 'HOME') }}/{{ goenv_path }}"
-- name: (GO Env) - Create versions directory
+
+- name: (GO Env) - Create versions directory.
   file:
     path: "{{ lookup('env', 'HOME') }}/{{ item }}"
     state: directory
@@ -79,7 +80,7 @@
   tags:
     - install
 
-- name: (GO Env) - install versions {{ nodes }}.
+- name: (GO Env) - install versions {{ nodes_go }}.
   shell:
     ~/{{ goenv_path }}/bin/goenv install "{{ item }}"
   with_items: "{{ nodes_go }}"
@@ -93,5 +94,75 @@
     line: "{{ goenv_versions | max }}"
     state: present
     create: yes
+  tags:
+    - install
+
+- name: (Py Env) - Check if py is installed.
+  stat:
+    path: "{{ lookup('env', 'HOME') }}/{{ pyenv_path }}"
+  register: pdir
+  tags:
+    - install
+
+- name: (Py Env) - downloading pyenv.
+  when: pdir.stat.isdir is not defined
+  shell: >
+    curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+  tags:
+    - install
+
+- name: (Py Env) - Create versions directory.
+  file:
+    path: "{{ lookup('env', 'HOME') }}/{{ item }}"
+    state: directory
+    mode: 0775
+  with_items:
+    - "{{ pyenv_path }}/versions"
+  tags:
+    - install
+
+- name: (Py Env) - Setting up pyenv.
+  lineinfile:
+    dest: "{{ lookup('env', 'HOME') }}/.bashrc" 
+    line: "{{ item }}"
+  with_items:
+    - 'export PATH="$HOME/{{ pyenv_path }}/bin:$PATH"'
+    - 'eval "$(pyenv init --path)"'
+    - 'eval "$(pyenv virtualenv-init -)"'
+  tags:
+    - install
+
+- name: (Py Env) - check installed versions.
+  shell:
+    ls {{ lookup('env', 'HOME') }}/{{ pyenv_path }}/versions
+  register: installed_nodes_py
+  tags:
+    - install
+
+- set_fact:
+    nodes_py: "{{ pyenv_versions | difference(installed_nodes_py.stdout_lines) }}"
+  tags:
+    - install
+
+- name: (Py Env) - install versions {{ nodes_py }}.
+  shell:
+    ~/{{ pyenv_path }}/bin/pyenv install "{{ item }}"
+  with_items: "{{ nodes_py }}"
+  when: nodes_py | length | int > 0
+  tags:
+    - install
+
+- name: (GO Env) - set global version to {{ pyenv_versions | max }}.
+  lineinfile:
+    dest: "{{ lookup('env', 'HOME') }}/{{ pyenv_path }}/version"
+    line: "{{ pyenv_versions | max }}"
+    state: present
+    create: yes
+  tags:
+    - install
+
+- name: (XEnv) - Restarting shell.
+  shell: >
+    exec $SHELL
   tags:
     - install

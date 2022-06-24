@@ -11,6 +11,9 @@
     goenv_version: "0.0.5"
     goenv_versions:
       - 1.18.0
+    pyenv_path: ".pyenv"
+    pyenv_versions:
+      - 3.10.5
   pre_tasks:
     - name: Update APT
       become: true

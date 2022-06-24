@@ -4,9 +4,6 @@
  - Add gpg key
  - Add auto-signed commits & tags
 
-## XEnv
- - Add pyenv
-
 ## Packages
  - Split to multiple files
  - Add golang, node, python and apt packages
