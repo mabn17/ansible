@@ -32,3 +32,4 @@
     - include: tasks/5.npm-packages.yml
     - include: tasks/6.zsh.yml
     - include: tasks/7.nvim.yml
+    - include: tasks/8.dotfiles.yml
