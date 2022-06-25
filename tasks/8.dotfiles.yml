@@ -1,4 +1,4 @@
-- name: (. files) - Cloning .dotfiles
+- name: (. files) - Cloning .dotfiles.
   ansible.builtin.git:
     repo: 'git@github.com:mabn17/.dotfiles.git'
     dest: "{{ lookup('env', 'HOME') }}/.dotfiles"
@@ -8,6 +8,6 @@
     version: master
   tags: &all_tags [ 'ubuntu', 'wsl', 'mac' ]
 
-- name: (. files) - Stow dotfiles
+- name: (. files) - Stow dotfiles.
   shell: cd $HOME/.dotfiles && ./all
   tags: *all_tags
