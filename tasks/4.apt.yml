@@ -1,8 +1,42 @@
 - name: (Tools) - Install packages.
   become: true
   apt:
-    name: [ "tmux", "fzf", "gimp", "xclip", "tldr", "apt-transport-https", "ripgrep", "shutter", "jq", "cmake", "pkg-config", "libpthread-stubs0-dev", "lua5.1", "unzip", "libtool", "libtool-bin", "gettext", "compton", "htop", "lsof", "ccache", "ninja-build", "dconf-editor", "pavucontrol", "moreutils", "clangd", "clang", "clang-11", "clang-12", "clangd", "clangd-10", "clangd-11", "clangd-12", "stow", "libfreetype6-dev", "gpg", "ca-certificates", "gconf2", "libasound2", "libgtk2.0-0", "libxss1", "libxcb-dri3-0", "libdrm2", "libgbm1", "libxshmfence1", "libxml2-dev", "libxslt1-dev", "liblzma-dev", "zlib1g-de" ]
+    name: [ "tmux", "fzf", "gimp", "xclip", "tldr", "apt-transport-https", "ripgrep", "shutter", "jq", "cmake", "pkg-config", "libpthread-stubs0-dev", "lua5.1", "unzip", "libtool", "libtool-bin", "gettext", "compton", "htop", "lsof", "ccache", "ninja-build", "dconf-editor", "pavucontrol", "moreutils", "clangd", "clang", "clang-11", "clang-12", "clangd", "clangd-10", "clangd-11", "clangd-12", "stow", "libfreetype6-dev", "gpg", "gnupg-agent", "ca-certificates", "gconf2", "libasound2", "libgtk2.0-0", "libxss1", "libxcb-dri3-0", "libdrm2", "libgbm1", "libxshmfence1", "libxml2-dev", "libxslt1-dev", "liblzma-dev", "zlib1g-de", "software-properties-common", "python3-pip", "python3-setuptools" ]
   tags: &all_tags [ 'ubuntu', 'mac', 'wsl' ]
+
+- name: (Tools) - Add Docker GPG key.
+  apt_key:
+    url: "{{ docker_gpg_url }}"
+    state: present
+  tags: *all_tags
+
+- name: (Tools) - Add Docker repository.
+    apt_repository:
+      repo: "{{ docker_repo }}"
+      state: present
+  tags: *all_tags
+
+- name: (Tools) - Install Docker.
+  apt: name={{ docker_packges }} state=latest update_cache=yes
+  tags: *all_tags
+
+- name: (Tools) - Install Python Docker module.
+  pip:
+    name: docker
+  tags: *all_tags
+
+- name: (Tools) - Add adminstrator to docker group.
+  user:
+    name: "{{ lookup('env', 'USER') }}"
+    groups: docker
+    append: yes
+  tags: *all_tags
+
+- name: (Tools) - Install Docker Compose.
+  get_url:
+    url: "{{ docker_compose_url }}"
+    dest: /usr/local/bin/docker-compose
+    mode: u+x,g+x,o+x
 
 - name: (Tools) - Check if JavaScript debugger exists.
   stat:
