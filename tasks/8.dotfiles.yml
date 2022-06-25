@@ -6,8 +6,22 @@
     update: yes
     accept_hostkey: yes
     version: master
-  tags: &all_tags [ 'ubuntu', 'wsl', 'mac' ]
+  tags:
+    - ubuntu
+    - wsl
+    - mac
 
-- name: (. files) - Stow dotfiles.
-  shell: cd $HOME/.dotfiles && ./all
-  tags: *all_tags
+- name: (. files) - Stow dotfiles for wsl.
+  shell: cd $HOME/.dotfiles && ./wsl
+  tags:
+    - wsl
+
+- name: (. files) - Stow dotfiles for mac.
+  shell: cd $HOME/.dotfiles && ./mac
+  tags:
+    - mac
+
+- name: (. files) - Stow dotfiles for ubuntu.
+  shell: cd $HOME/.dotfiles && ./ubuntu
+  tags:
+    - ubuntu
