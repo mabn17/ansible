@@ -1,0 +1,12 @@
+---
+nvm_path: ".nvm"
+nvm_version: "0.39.0"
+nvm_versions:
+  - 18.1.0
+goenv_path: ".goenv"
+goenv_version: "0.0.5"
+goenv_versions:
+  - 1.18.0
+pyenv_path: ".pyenv"
+pyenv_versions:
+  - 3.10.5

@@ -1,0 +1,2 @@
+---
+personal: "{{ lookup('env', 'HOME') }}/personal"

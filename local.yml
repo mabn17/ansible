@@ -1,19 +1,9 @@
 - hosts: localhost
-  vars:
-    source_key: "./.ssh/id_rsa"
-    dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
-    personal: "{{ lookup('env', 'HOME') }}/personal"
-    nvm_path: ".nvm"
-    nvm_version: "0.39.0"
-    nvm_versions:
-      - 18.1.0
-    goenv_path: ".goenv"
-    goenv_version: "0.0.5"
-    goenv_versions:
-      - 1.18.0
-    pyenv_path: ".pyenv"
-    pyenv_versions:
-      - 3.10.5
+  vars_files:
+    - vars/global.yaml
+    - vars/ssh.yaml
+    - vars/xenv.yaml
+    - vars/docker.yaml
   pre_tasks:
     - name: Update APT
       become: true

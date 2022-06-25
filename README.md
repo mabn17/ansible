@@ -7,7 +7,7 @@ Install prerequieistes and run the playbook.
 
 ```bash
 ./install
-ansible-playbook local.yml --ask-vault-pass --tags {ENV}
+ansible-playbook local.yml --ask-vault-pass --ask-become-pass --tags {ENV}
 ```
 
 Substitute {ENV} your enviroment. Currently supports:
