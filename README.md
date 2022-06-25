@@ -13,7 +13,7 @@ ansible-playbook local.yml --ask-vault-pass --tags {ENV}
 Substitute {ENV} your enviroment. Currently supports:
  - `wsl`
  - `ubuntu`
- - `mac` (Not yet tested)
+ - `mac`
 
 ### Commands
 
