@@ -2,7 +2,7 @@
   npm:
     name: eslint
     global: yes
-  tags: &all_tags [ 'ubuntu', 'mac', 'wsl' ]
+  tags: &all_tags [ 'ubuntu', 'wsl' ]
 
 - name: (NPM) - Install Python server.
   npm:

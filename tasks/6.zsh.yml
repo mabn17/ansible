@@ -1,6 +1,6 @@
 - name: (ZSH) - Install ZSH.
   apt: name=zsh
-  tags: &all_tags [ 'ubuntu', 'wsl', 'mac' ]
+  tags: &all_tags [ 'ubuntu', 'wsl']
 
 - name:  (ZSH) - Change shell to zsh.
   shell: chsh -s $(which zsh)

@@ -1,6 +1,6 @@
 - name: (NVIM) - Remove neovim.
   shell: rm -rf ~/neovim
-  tags: &all_tags [ 'ubuntu', 'wsl', 'mac' ]
+  tags: &all_tags [ 'ubuntu', 'wsl' ]
 
 - name: (NVIM) - Get Packer.
   ansible.builtin.git:

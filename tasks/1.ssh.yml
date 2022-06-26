@@ -3,7 +3,7 @@
     dest: "{{ dest_key | dirname  }}"
     mode: 0700
     state: directory
-  tags: &all_tags [ 'ubuntu', 'mac', 'wsl' ]
+  tags: &all_tags [ 'ubuntu', 'wsl' ]
 
 - name: (SSH) Install private ssh_key.
   copy:

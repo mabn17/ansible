@@ -13,7 +13,6 @@
       tags:
         - ubuntu
         - wsl
-        - mac
   tasks:
     - include: tasks/1.ssh.yml
     - include: tasks/2.git.yml

@@ -2,7 +2,7 @@
   become: true
   apt:
     name: [ "tmux", "fzf", "gimp", "xclip", "tldr", "apt-transport-https", "ripgrep", "shutter", "jq", "cmake", "pkg-config", "libpthread-stubs0-dev", "lua5.1", "unzip", "libtool", "libtool-bin", "gettext", "compton", "htop", "lsof", "ccache", "ninja-build", "dconf-editor", "pavucontrol", "moreutils", "clangd", "clang", "clang-11", "clang-12", "clangd", "clangd-10", "clangd-11", "clangd-12", "stow", "libfreetype6-dev", "gpg", "gnupg-agent", "ca-certificates", "gconf2", "libasound2", "libgtk2.0-0", "libxss1", "libxcb-dri3-0", "libdrm2", "libgbm1", "libxshmfence1", "libxml2-dev", "libxslt1-dev", "liblzma-dev", "zlib1g-de", "software-properties-common", "python3-pip", "python3-setuptools" ]
-  tags: &all_tags [ 'ubuntu', 'mac', 'wsl' ]
+  tags: &all_tags [ 'ubuntu', 'wsl' ]
 
 - name: (Tools) - Add Docker GPG key.
   apt_key:

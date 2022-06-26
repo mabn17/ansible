@@ -2,7 +2,7 @@
   stat:
     path: "{{ lookup('env', 'HOME') }}/{{ nvm_path }}"
   register: ndir
-  tags: &all_tags [ 'ubuntu', 'mac', 'wsl' ]
+  tags: &all_tags [ 'ubuntu', 'wsl' ]
 
 - name: (Node Env) - Installing nvm.
   when: ndir.stat.isdir is not defined

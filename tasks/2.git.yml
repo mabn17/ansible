@@ -3,7 +3,7 @@
     name: user.email
     scope: global
     value: "martin.d@live.se"
-  tags: &all_tags [ 'ubuntu', 'mac', 'wsl' ]
+  tags: &all_tags [ 'ubuntu', 'wsl' ]
 
 - name: (GIT) Setting up personal name.
   git_config:
