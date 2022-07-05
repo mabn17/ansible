@@ -12,3 +12,8 @@ Install go-language-server (GO111MODULE=on go get golang.org/x/tools/gopls@lates
 
 # Work
 new github profile, gpg key, ssh keys, .npmrc, download git repos.
+
+
+
+
+Add sudo apt-get install zlib1g-dev to install script.
